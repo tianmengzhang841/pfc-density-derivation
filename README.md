@@ -2,7 +2,7 @@
 
 Derivation and visualization of the two-mode PFC density function for a square lattice, with annotated nearest-neighbor (j=1) and next-nearest-neighbor (j=2) modes.
 
-> **Author:** Tianmeng Zhang | Technion – Israel Institute of Technology, MSc Materials Science & Engineering
+> **Author:** Tianmeng Zhang 
 
 ---
 
@@ -18,7 +18,7 @@ Derivation and visualization of the two-mode PFC density function for a square l
 
 ## The final result
 
-$$n(\mathbf{r}) = A_1\!\left[2\cos\frac{2\pi x}{a} + 2\cos\frac{2\pi y}{a}\right] + A_2 \cdot 4\cos\frac{2\pi x}{a}\cos\frac{2\pi y}{a}$$
+$$n(\mathbf{r}) = A_1 \cdot \left[2\cos\frac{2\pi x}{a} + 2\cos\frac{2\pi y}{a}\right] + A_2 \cdot 4\cos\frac{2\pi x}{a}\cos\frac{2\pi y}{a}$$
 
 ---
 
