@@ -6,72 +6,67 @@ Derivation and visualization of the two-mode PFC density function for a square l
 
 ---
 
-## Final result
+## What this repository contains
+
+| File | Description |
+|------|-------------|
+| `docs/derivation.md` | Full step-by-step mathematical derivation |
+| `src/visualize_density.py` | Python visualization with annotated atom positions |
+| `results/` | Generated figures (auto-created on first run) |
+
+---
+
+## The final result
 
 $$n(\mathbf{r}) = A_1\!\left[2\cos\frac{2\pi x}{a} + 2\cos\frac{2\pi y}{a}\right] + A_2 \cdot 4\cos\frac{2\pi x}{a}\cos\frac{2\pi y}{a}$$
 
 ---
 
-## Step 1 — Real space lattice: NN and NNN neighbors
+## Derivation summary (5 steps)
 
-The square lattice has two types of neighbors relative to the central atom:
+**Step 1 — Fourier expansion**  
+Any periodic density field can be written as $n(\mathbf{r}) = \sum_\mathbf{G} \hat{n}_\mathbf{G} e^{i\mathbf{G}\cdot\mathbf{r}}$. The complex exponential basis is chosen because each term naturally satisfies the lattice periodicity — no additional constraints needed.
 
-- **Nearest neighbors (NN, j=1):** 4 atoms along ±x and ±y axes, distance = **a**
-- **Next-nearest neighbors (NNN, j=2):** 4 atoms along diagonal directions, distance = **a√2**
+**Step 2 — 8 reciprocal lattice vectors (two-mode approximation)**  
+For a square lattice with $k=2\pi/a$, we keep only the two nearest shells in reciprocal space:
 
-Each neighbor direction contributes one exponential term `e^(iG·r)`. Conjugate pairs combine via Euler's formula into real cosine terms.
+| Mode | Directions | $|\mathbf{G}|$ |
+|------|-----------|------|
+| j=1 (nearest) | $(±k,0),\ (0,±k)$ — 4 vectors | $k$ |
+| j=2 (next-nearest) | $(±k,±k)$ — 4 vectors | $k\sqrt{2}$ |
 
-![Real space NN and NNN neighbors](docs/images/fig1_real_space_labeled.png)
+**Step 3 — Pairing conjugate directions → cosines**
 
----
+$$e^{+ikx} + e^{-ikx} = 2\cos(kx)$$
 
-## Step 2 — j=1 mode: 4 nearest-neighbor directions
+$$e^{+i(kx+ky)} + e^{-i(kx+ky)} + e^{+i(kx-ky)} + e^{-i(kx-ky)} = 4\cos(kx)\cos(ky)$$
 
-The 4 NN directions sum to:
+The last step uses the sum-to-product identity $\cos A + \cos B = 2\cos\frac{A+B}{2}\cos\frac{A-B}{2}$.
 
-$$\sum_{l=1}^{4} e^{i\mathbf{G}_l \cdot \mathbf{r}} = 2\cos(kx) + 2\cos(ky)$$
+**Step 4 — Assemble two-mode density**  
+Each mode carries a free-energy-determined amplitude $A_j$, giving the final expression above.
 
-This produces a grid pattern with **maximum density (+4) at lattice sites** and zero density at edge centers.
-
-![j=1 mode density field](docs/images/fig2_mode_j1_annotated.png)
-
----
-
-## Step 3 — j=2 mode: 4 next-nearest-neighbor directions
-
-The 4 NNN diagonal directions sum via the product-to-sum identity to:
-
-$$\sum_{l=5}^{8} e^{i\mathbf{G}_l \cdot \mathbf{r}} = 4\cos(kx)\cos(ky)$$
-
-This produces a checkerboard pattern. Crucially, the j=2 mode is **−4 at edge centers**, which suppresses the density between atoms when combined with j=1.
-
-![j=2 mode density field](docs/images/fig3_mode_j2_annotated.png)
-
----
-
-## Step 4 — Combined density: peak sharpening
-
-Combining both modes with amplitudes A₁ and A₂:
-
-$$n(\mathbf{r}) = A_1[2\cos(kx)+2\cos(ky)] + A_2 \cdot 4\cos(kx)\cos(ky)$$
-
-Increasing A₂ sharpens the atomic density peaks — making them more delta-function-like and physically realistic.
+**Step 5 — Physical verification**
 
 | Position | j=1 | j=2 | Physical role |
-|---|---|---|---|
-| Lattice site (0,0) | +4 | +4 | Density maximum = **atom** |
-| Edge center (a/2, 0) | 0 | −4 | j=2 suppresses density |
-| Face center (a/2, a/2) | −4 | +4 | Modes partially cancel |
+|----------|-----|-----|---------------|
+| Lattice site $(0,0)$ | +4 | +4 | Density maximum = **atom** |
+| Edge center $(a/2,0)$ | 0 | −4 | j=2 suppresses density → **between atoms** |
+| Face center $(a/2,a/2)$ | −4 | +4 | Modes partially cancel |
 
-![Combined density for A2 = 0, 0.2, 0.4](docs/images/fig4_combined_annotated.png)
+**j=2 sharpens atomic peaks**: it suppresses density at edge centers, making the peaks more delta-function-like and physically realistic.
 
 ---
 
-## Step 5 — 1D cross-section along x-axis
+## Figures produced
 
-Along y=0, the individual mode contributions and their sum are clearly visible. Atomic peaks (triangles) coincide with density maxima of the combined field.
-
-![1D cross-section](docs/images/fig5_1d_crosssection.png)
+| Figure | Content |
+|--------|---------|
+| `fig1_reciprocal_space.png` | 8 G-vectors in reciprocal space, grouped by mode |
+| `fig2_mode_j1_annotated.png` | j=1 density field with atom and edge-center annotations |
+| `fig3_mode_j2_annotated.png` | j=2 density field with atom, face-center, and edge-center annotations |
+| `fig4_combined_density_annotated.png` | Combined density for A₂=0, 0.2, 0.4 — showing peak sharpening |
+| `fig5_1d_crosssection.png` | 1D cross-section along x-axis comparing j=1, j=2, and sum |
 
 ---
 
@@ -85,18 +80,9 @@ python src/visualize_density.py
 
 ---
 
-## File structure
+## Connection to the PFC model
 
-```
-pfc-density-derivation/
-├── docs/
-│   ├── derivation.md        ← full mathematical derivation
-│   └── images/              ← figures used in this README
-├── src/
-│   └── visualize_density.py ← visualization code
-├── requirements.txt
-└── README.md
-```
+This density function is the real-space representation of the two-mode amplitude approximation used in PFC simulations. The amplitudes $A_1, A_2$ are not free parameters — they are determined by minimizing the PFC free energy functional at each temperature. When $A_1 = A_2 = 0$, the density is uniform (liquid phase); when $A_1, A_2 > 0$, the periodic density peaks appear (solid phase). The solid–liquid phase transition in PFC is precisely the point where these amplitudes grow from zero.
 
 ---
 
