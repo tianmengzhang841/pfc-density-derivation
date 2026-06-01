@@ -11,7 +11,7 @@ This document derives the two-mode density function used in the Phase Field Crys
 
 The final result is:
 
-$$n(\mathbf{r}) = A_1 \cdot \left[2\cos\frac{2\pi x}{a} + 2\cos\frac{2\pi y}{a}\right] + A_2 \cdot 4\cos\frac{2\pi x}{a}\cos\frac{2\pi y}{a}$$
+$$n(\mathbf{r}) = A_1 \left[2\cos\!\frac{2\pi x}{a} + 2\cos\!\frac{2\pi y}{a}\right] + A_2 \cdot 4\cos\!\frac{2\pi x}{a}\cos\!\frac{2\pi y}{a}$$
 
 ---
 
